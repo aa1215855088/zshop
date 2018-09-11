@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnguigu.zshop.dao.ProductTypeDao">
+
+    <select id="listAll" resultType="productType">
+        select *
+        from t_product_type
+    </select>
+    <insert id="save" parameterType="java.lang.String">
+        insert into t_product_type (type_name, type_status)
+        values (#{typeName}, 1);
+    </insert>
+
+    <select id="getProductTypeByName" parameterType="java.lang.String" resultType="productType">
+        select *
+        from t_product_type
+        where type_name = #{typeName};
+    </select>
+
+    <update id="updateStatus">
+        update t_product_type
+        set type_status = #{status}
+        where type_id = #{id};
+    </update>
+
+    <update id="updateName">
+        update t_product_type
+        set type_name = #{name}
+        where type_id = #{id};
+    </update>
+
+    <select id="getProductTypeById" resultType="productType">
+        select *
+        from t_product_type
+        where type_id = #{id};
+    </select>
+
+    <delete id="delProductById">
+        delete
+        from t_product_type
+        where type_id = #{id}
+    </delete>
+
+    <select id="findEnable" resultType="productType">
+        select *
+        from t_product_type
+        where type_status = 1;
+    </select>
+</mapper>
