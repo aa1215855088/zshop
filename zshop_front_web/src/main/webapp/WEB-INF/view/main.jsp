@@ -64,7 +64,7 @@
                         // //局部刷新
                         // var info = template.get("info")
                         // $("#userInfo").html(info);
-                        window.location=location
+                        window.location = location
                     } else if (data.status == 2) {
                         layer.msg(data.message, {
                             time: 2000,
@@ -411,7 +411,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">手机号：</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text" placeholder="请输入手机号">
+                            <input class="form-control" id="phone" type="text" placeholder="请输入手机号">
                         </div>
                     </div>
                     <div class="form-group">
@@ -420,7 +420,50 @@
                             <input class="form-control" type="text" placeholder="请输入验证码">
                         </div>
                         <div class="col-sm-2">
-                            <button class="pass-item-timer" type="button">发送验证码</button>
+                            <button class="pass-item-timer" id="send" type="button" onclick="SendVerificationCode()">
+                                发送验证码
+                            </button>
+                            <script>
+                                var t
+
+                                function SendVerificationCode() {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "${pageContext.request.contextPath}/zshop/SendVerificationCode",
+                                        data: {
+                                            phone: $("#phone").val()
+                                        },
+                                        success: function (data) {
+                                            if (data.status == 1) {
+                                                var time = 60;
+                                                var t = setInterval(function () {
+                                                    time--;
+                                                    if (time > 0) {
+                                                        $("#send").text("已发送(" + time+")");
+                                                        $('#send').attr("disabled", true);
+                                                    } else {
+                                                        $("#send").text("重新发送");
+                                                        $('#send').attr("disabled", false);
+                                                        clearInterval(t);
+                                                    }
+
+                                                }, 1000)
+                                            } else if (data.status == 2) {
+                                                layer.msg(data.message, {
+                                                    time: 2000,
+                                                    icon: 7
+                                                })
+                                            }
+                                        },
+                                        error: function () {
+                                            layer.msg("系统繁忙，请重试!", {
+                                                icon: 7,
+                                                time: 2000
+                                            })
+                                        }
+                                    });
+                                };
+                            </script>
                         </div>
                     </div>
                 </div>

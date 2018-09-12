@@ -10,7 +10,8 @@ import org.apache.shiro.util.ByteSource;
  * @create: 2018-09-05 21:33
  **/
 public class PasswordUtil {
-    public static final String md5(String password, String salt){
+
+    public static final String md5(String password, String salt) {
         //加密方式
         String hashAlgorithmName = "MD5";
         //盐：为了即使相同的密码不同的盐加密后的结果也不同
