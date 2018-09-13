@@ -417,37 +417,79 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">验证码：</label>
                         <div class="col-sm-4">
-                            <input class="form-control" type="text" placeholder="请输入验证码">
+                            <input class="form-control" id="verificationCode" type="text" placeholder="请输入验证码">
                         </div>
                         <div class="col-sm-2">
                             <button class="pass-item-timer" id="send" type="button" onclick="SendVerificationCode()">
                                 发送验证码
                             </button>
                             <script>
-                                var t
-
                                 function SendVerificationCode() {
+                                    if (!(/^1[34578]\d{9}$/.test($("#phone").val()))) {
+                                        layer.msg("请输入正确的手机号码", {
+                                            time: 2000,
+                                            icon: 7
+                                        })
+                                    } else {
+                                        $.ajax({
+                                            type: "post",
+                                            url: "${pageContext.request.contextPath}/zshop/SendVerificationCode",
+                                            data: {
+                                                phone: $("#phone").val()
+                                            },
+                                            success: function (data) {
+                                                if (data.status == 1) {
+                                                    var time = 60;
+                                                    var t = setInterval(function () {
+                                                        time--;
+                                                        if (time > 0) {
+                                                            $("#send").text("已发送(" + time + ")");
+                                                            $('#send').attr("disabled", true);
+                                                        } else {
+                                                            $("#send").text("重新发送");
+                                                            $('#send').attr("disabled", false);
+                                                            clearInterval(t);
+                                                        }
+
+                                                    }, 1000)
+                                                } else if (data.status == 2) {
+                                                    layer.msg(data.message, {
+                                                        time: 2000,
+                                                        icon: 7
+                                                    })
+                                                } else if (data.status == 3) {
+                                                    layer.msg("该手机号未注册!请先注册", {
+                                                        time: 2000,
+                                                        icon: 7
+                                                    });
+                                                    $("#zcPhone").val($("#phone").val());
+                                                    $("#loginModal").modal("hide");
+                                                    $("#registModal").modal("show");
+                                                }
+                                            },
+                                            error: function () {
+                                                layer.msg("系统繁忙，请重试!", {
+                                                    icon: 7,
+                                                    time: 2000
+                                                })
+                                            }
+                                        });
+                                    }
+
+                                };
+
+                                function textLogin() {
                                     $.ajax({
                                         type: "post",
-                                        url: "${pageContext.request.contextPath}/zshop/SendVerificationCode",
+                                        url: "${pageContext.request.contextPath}/zshop/textLogin",
                                         data: {
-                                            phone: $("#phone").val()
+                                            phone: $("#phone").val(),
+                                            verificationCode: $("#verificationCode").val(),
                                         },
+                                        dataType: "json",
                                         success: function (data) {
                                             if (data.status == 1) {
-                                                var time = 60;
-                                                var t = setInterval(function () {
-                                                    time--;
-                                                    if (time > 0) {
-                                                        $("#send").text("已发送(" + time+")");
-                                                        $('#send').attr("disabled", true);
-                                                    } else {
-                                                        $("#send").text("重新发送");
-                                                        $('#send').attr("disabled", false);
-                                                        clearInterval(t);
-                                                    }
-
-                                                }, 1000)
+                                                window.location = location
                                             } else if (data.status == 2) {
                                                 layer.msg(data.message, {
                                                     time: 2000,
@@ -461,8 +503,8 @@
                                                 time: 2000
                                             })
                                         }
-                                    });
-                                };
+                                    })
+                                }
                             </script>
                         </div>
                     </div>
@@ -472,7 +514,7 @@
                     <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">
                         关&nbsp;&nbsp;闭
                     </button>
-                    <button type="submit" class="btn btn-warning">登&nbsp;&nbsp;陆</button> &nbsp;&nbsp;
+                    <button type="button" onclick="textLogin()" class="btn btn-warning">登&nbsp;&nbsp;陆</button> &nbsp;&nbsp;
                     <a class="btn-link" id="btn-account-back">用户名密码登录</a>
                 </div>
             </form>
@@ -514,7 +556,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系电话:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text">
+                            <input class="form-control" id="zcPhone" type="text">
                         </div>
                     </div>
                     <div class="form-group">

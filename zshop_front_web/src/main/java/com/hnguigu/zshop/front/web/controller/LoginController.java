@@ -6,12 +6,15 @@ import com.hnguigu.zshop.common.util.HttpClientUtils;
 import com.hnguigu.zshop.common.util.RandomUtil;
 import com.hnguigu.zshop.common.util.RedisUtil;
 import com.hnguigu.zshop.common.util.ResponseResult;
+import com.hnguigu.zshop.domain.Customer;
+import com.hnguigu.zshop.service.CustomerService;
 import com.hnguigu.zshop.service.RedisCartService;
 import com.hnguigu.zshop.vo.cart.BuyerCart;
 import com.hnguigu.zshop.front.web.utils.CookieCartUtils;
 import com.hnguigu.zshop.vo.cart.BuyerItem;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +42,9 @@ public class LoginController {
 
     @Autowired
     private RedisCartService redisCartService;
+    @Autowired
+    private CustomerService customerService;
+
 
     @Value("${sms.url}")
     private String url;
@@ -106,23 +112,47 @@ public class LoginController {
     @RequestMapping("/SendVerificationCode")
     @ResponseBody
     public ResponseResult sendVerificationCode(String phone) {
+        Customer customerByPhone = this.customerService.getCustomerByPhone(phone);
+        if (customerByPhone == null) {
+            return ResponseResult.fail();
+        }
         try {
-            //1.首先生成6位数的验证码
+            //1 首先生成6位数的验证码
             int randNum = RandomUtil.getRandNum(1, 999999);
             //1.1设置验证码的有效时间（通过redis）
             RedisUtil.set(phone + "Code", String.valueOf(randNum), 60 * 15);
-            //2.通过HttpClient后台发送请求
+            //2 通过HttpClient后台发送请求
             Map<String, String> params = new HashMap<>();
             params.put("mobile", phone);
             params.put("tpl_id", tplId);
             params.put("tpl_value", tplValue + randNum);
             params.put("key", kye);
-//            HttpClientResult httpClientResult = HttpClientUtils.doGet(url, params);
-//            System.out.println(httpClientResult.getCode());
+            //2.1 发送短信
+            HttpClientResult httpClientResult = HttpClientUtils.doGet(url, params);
+            System.out.println(httpClientResult.getCode());
             return ResponseResult.success();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseResult.fail("系统繁忙!请稍后重试.");
+        }
+    }
+
+    @RequestMapping("textLogin")
+    @ResponseBody
+    public ResponseResult textLogin(String phone, String verificationCode) {
+        Customer customer = this.customerService.getCustomerByPhone(phone);
+        if (customer != null) {
+            String code = RedisUtil.get(phone + "Code");
+            if (verificationCode.equals(code)) {
+                Subject subject = SecurityUtils.getSubject();
+                Session session = subject.getSession();
+                session.setAttribute("user", customer);
+                return ResponseResult.success();
+            } else {
+                return ResponseResult.fail("验证码有误!请重新输入。");
+            }
+        } else {
+            return ResponseResult.fail("系统繁忙！请重试.");
         }
     }
 

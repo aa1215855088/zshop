@@ -58,4 +58,9 @@
         where login_name = #{loginName};
     </select>
 
+    <select id="getCustomerByPhone" resultType="customer">
+        select *
+        from t_customer
+        where phone = #{phone};
+    </select>
 </mapper>

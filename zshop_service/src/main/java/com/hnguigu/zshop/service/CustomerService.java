@@ -68,4 +68,13 @@ public interface CustomerService {
      * @return
      */
     Customer getCustomerByNanme(String username);
+
+    /**
+     * 短信登录
+     * 根据手机号查询用户
+     *
+     * @param phone
+     * @return
+     */
+    Customer getCustomerByPhone(String phone);
 }

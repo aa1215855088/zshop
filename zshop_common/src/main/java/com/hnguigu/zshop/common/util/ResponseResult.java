@@ -55,6 +55,10 @@ public class ResponseResult {
         return new ResponseResult(ResponseStatusConstant.RESPONSE_STATUS_FAIL, message, null);
     }
 
+    public static ResponseResult fail() {
+        return new ResponseResult(ResponseStatusConstant.RESPONSE_STATUS_NO_PERMISSION, "fali", null);
+    }
+
     public int getStatus() {
         return status;
     }

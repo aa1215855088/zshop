@@ -57,4 +57,11 @@ public interface CustomerDao {
      * @return
      */
     Customer getCustomerByLoginName(String loginName);
+
+    /**
+     * 根据手机号查询用户
+     * @param phone
+     * @return
+     */
+    Customer getCustomerByPhone(String phone);
 }
