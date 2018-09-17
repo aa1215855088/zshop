@@ -31,4 +31,14 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10000000"/>
     </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/zshop/myOrders"/>
+            <mvc:mapping path="/zshop/center"/>
+            <mvc:mapping path="/zshop/order"/>
+            <mvc:mapping path="/zshop/generatingOrder"/>
+            <bean class="com.hnguigu.zshop.front.web.interceptor.AuthenticationInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

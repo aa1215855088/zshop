@@ -32,7 +32,7 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
-        Customer customer = customerService.getCustomerByNanme(username);
+        Customer customer = customerService.getCustomerByName(username);
 
         if (customer != null) {
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(customer.getLoginName(), customer.getPassword(), customer.getName());

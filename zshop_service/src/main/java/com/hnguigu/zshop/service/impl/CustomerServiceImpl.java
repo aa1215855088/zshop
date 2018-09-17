@@ -38,13 +38,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(Customer customer) {
-        this.customerDao.updateCustomer(customer);
+    public int updateCustomer(Customer customer) {
+        return this.customerDao.updateCustomer(customer);
     }
 
     @Override
     public void updateValid(Integer id, Integer isValid) {
-        this.customerDao.updateValid(id, isValid);
+         this.customerDao.updateValid(id, isValid);
     }
 
     @Override
@@ -59,12 +59,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getCustomerByNanme(String username) {
+    public Customer getCustomerByName(String username) {
         return this.customerDao.getCustomerByLoginName(username);
     }
 
     @Override
     public Customer getCustomerByPhone(String phone) {
         return this.customerDao.getCustomerByPhone(phone);
+    }
+
+    @Override
+    public int addUser(Customer customer) {
+        return this.customerDao.addUser(customer);
     }
 }

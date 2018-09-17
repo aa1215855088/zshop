@@ -26,7 +26,7 @@ public class BuyerCart implements Serializable {
      *
      * @param item
      */
-    public void  addProducts(BuyerItem item) {
+    public void addProducts(BuyerItem item) {
         if (items.contains(item)) {
             for (BuyerItem buyerItem : items) {
                 if (buyerItem.equals(item)) {
@@ -47,8 +47,9 @@ public class BuyerCart implements Serializable {
     }
 
     //获取商品结算总价
-    public double getTotalPrice() {
-        double sum = 0;
+    public float getTotalPrice() {
+        float
+                sum = 0;
         for (BuyerItem item : items) {
             sum += item.getPriceSum();
         }

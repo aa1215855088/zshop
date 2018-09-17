@@ -40,7 +40,7 @@ public interface CustomerDao {
      *
      * @param customer
      */
-    void updateCustomer(Customer customer);
+    int updateCustomer(Customer customer);
 
     /**
      * 修改客户的权限
@@ -60,8 +60,17 @@ public interface CustomerDao {
 
     /**
      * 根据手机号查询用户
+     *
      * @param phone
      * @return
      */
     Customer getCustomerByPhone(String phone);
+
+    /**
+     * 添加用户
+     *
+     * @param customer
+     */
+    int addUser(Customer customer);
+
 }

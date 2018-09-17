@@ -47,8 +47,8 @@ public class BuyerItem implements Serializable {
         this.amount = amount;
     }
 
-    public double getPriceSum() {
-        return getProduct().getPrice() * getAmount();
+    public float getPriceSum() {
+        return (float) (getProduct().getPrice() * getAmount());
     }
 
     @Override

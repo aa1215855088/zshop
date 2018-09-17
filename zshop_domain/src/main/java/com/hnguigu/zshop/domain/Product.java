@@ -25,7 +25,7 @@ public class Product implements Serializable {
     /**
      * 商品价格
      */
-    private Double price;
+    private float price;
 
     /**
      * 商品信息
@@ -70,11 +70,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

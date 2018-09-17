@@ -44,6 +44,8 @@ public class MainController {
         if (pageNum == null) {
             pageNum = PaginationConstant.PAGE_NUM;
         }
+
+        //分页插件
         PageHelper.startPage(pageNum, 8);
 
         List<Product> products = this.productService.queryProduct(queryProduct);

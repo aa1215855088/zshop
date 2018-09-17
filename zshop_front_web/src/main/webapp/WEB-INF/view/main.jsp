@@ -19,6 +19,7 @@
     <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrapValidator.js"></script>
     <script src="${pageContext.request.contextPath}/js/template.js"></script>
+    <script src="${pageContext.request.contextPath}/myjs/myJs.js"></script>
 </head>
 <script id="info" type="text/html">
     <li class="userName">
@@ -44,9 +45,19 @@
         </ul>
     </li>
 </script>
+<script id="home" type="text/html">
+    <li>
+        <a href="#" data-toggle="modal" data-target="#loginModal">登陆</a>
+    </li>
+    <li>
+        <a href="#" data-toggle="modal" data-target="#registModal">注册</a>
+    </li>
+</script>
 <script>
     $(function () {
-
+        if (${login=="yes"}) {
+            $("#loginModal").modal("show");
+        }
         $("#login").bind("click", function () {
             $.ajax({
                 type: "post",
@@ -60,11 +71,9 @@
                 },
                 success: function (data) {
                     if (data.status == 1) {
-                        // $("#loginModal").modal("hide")
-                        // //局部刷新
-                        // var info = template.get("info")
-                        // $("#userInfo").html(info);
-                        window.location = location
+                        //刷新
+                        location.reload();
+
                     } else if (data.status == 2) {
                         layer.msg(data.message, {
                             time: 2000,
@@ -82,7 +91,7 @@
                     layer.close(loading);
                 }
             })
-        })
+        });
 
         $("#queryProduct").bootstrapValidator({
             feedbackIcons: {
@@ -154,11 +163,128 @@
                 window.location = "${pageContext.request.contextPath}/zshop/home?" + $("#queryProduct").serialize()
             }
         })
-    })
+    });
 
-    /*加入购物车*/
+    //加入购物车
     function addCart(id) {
         window.location = "${pageContext.request.contextPath}/zshop/addCart?id=" + id
+    }
+    //修改密码
+    function updatePassword() {
+        //手动开启验证规则
+        $('#updatePwdForm').data('bootstrapValidator').validate();
+        if (!$('#updatePwdForm').data('bootstrapValidator').isValid()) {
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/user/updatePassword",
+            data: {
+                password: $("#newPassword2").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 1) {
+                    layer.msg(data.message, {
+                        time: 2000,
+                        icon: 1
+                    });
+                    //局部刷新
+                    var home = template.get("home");
+                    $("#userInfo").html(home);
+                    $("#loginModal").modal("show");
+                    $("#modifyPasswordModal").modal("hide");
+                } else if (data.status == 2) {
+                    layer.msg(data.message, {
+                            time: 2000,
+                            icon: 1
+                        }
+                    )
+                }
+            }
+        })
+    }
+    //发送验证码
+    function SendVerificationCode() {
+        if (!(/^1[34578]\d{9}$/.test($("#phone").val()))) {
+            layer.msg("请输入正确的手机号码", {
+                time: 2000,
+                icon: 7
+            })
+        } else {
+            $.ajax({
+                type: "post",
+                url: "${pageContext.request.contextPath}/zshop/SendVerificationCode",
+                data: {
+                    phone: $("#phone").val()
+                },
+                success: function (data) {
+                    if (data.status == 1) {
+                        var time = 60;
+                        var t = setInterval(function () {
+                            time--;
+                            if (time > 0) {
+                                $("#send").text("已发送(" + time + ")");
+                                $('#send').attr("disabled", true);
+                            } else {
+                                $("#send").text("重新发送");
+                                $('#send').attr("disabled", false);
+                                clearInterval(t);
+                            }
+
+                        }, 1000)
+                    } else if (data.status == 2) {
+                        layer.msg(data.message, {
+                            time: 2000,
+                            icon: 7
+                        })
+                    } else if (data.status == 3) {
+                        layer.msg("该手机号未注册!请先注册", {
+                            time: 2000,
+                            icon: 7
+                        });
+                        $("#zcPhone").val($("#phone").val());
+                        $("#loginModal").modal("hide");
+                        $("#registModal").modal("show");
+                    }
+                },
+                error: function () {
+                    layer.msg("系统繁忙，请重试!", {
+                        icon: 7,
+                        time: 2000
+                    })
+                }
+            });
+        }
+
+    };
+    //短信登录
+    function textLogin() {
+        $.ajax({
+            type: "post",
+            url: "${pageContext.request.contextPath}/zshop/textLogin",
+            data: {
+                phone: $("#phone").val(),
+                verificationCode: $("#verificationCode").val(),
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 1) {
+                    window.location = location
+                } else if (data.status == 2) {
+                    layer.msg(data.message, {
+                        time: 2000,
+                        icon: 7
+                    })
+                }
+            },
+            error: function () {
+                layer.msg("系统繁忙，请重试!", {
+                    icon: 7,
+                    time: 2000
+                })
+            }
+        })
     }
 </script>
 <body>
@@ -175,16 +301,16 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="#">商城主页</a>
+                        <a href="${pageContext.request.contextPath}/zshop/home">商城主页</a>
                     </li>
                     <li>
-                        <a href="myOrders.html">我的订单</a>
+                        <a href="#" onclick="myOrders()">我的订单</a>
                     </li>
                     <li>
                         <a href="${pageContext.request.contextPath}/zshop/cart">购物车</a>
                     </li>
                     <li class="dropdown">
-                        <a href="${pageContext.request.contextPath}/zshop/center">会员中心</a>
+                        <a href="#" onclick="center()">会员中心</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right" id="userInfo">
@@ -329,24 +455,25 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">修改密码</h4>
             </div>
-            <form action="" class="form-horizontal" method="post">
+            <form action="${pageContext.request.contextPath}/user/updatePassword" id="updatePwdForm"
+                  class="form-horizontal" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">原密码：</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="password">
+                            <input class="form-control" id="oldPassword" name="oldPassword" type="password">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">新密码：</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="password">
+                            <input class="form-control" name="newPassword" id="newPassword" type="password">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">重复密码：</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="password">
+                            <input class="form-control" name="newPassword2" id="newPassword2" type="password">
                         </div>
                     </div>
                 </div>
@@ -355,9 +482,12 @@
                         关&nbsp;&nbsp;闭
                     </button>
                     <button type="reset" class="btn btn-warning">重&nbsp;&nbsp;置</button>
-                    <button type="submit" class="btn btn-warning">修&nbsp;&nbsp;改</button>
+                    <button type="button" class="btn btn-warning" onclick="updatePassword()">修&nbsp;&nbsp;改</button>
                 </div>
             </form>
+            <script>
+
+            </script>
         </div>
     </div>
 </div>
@@ -424,87 +554,7 @@
                                 发送验证码
                             </button>
                             <script>
-                                function SendVerificationCode() {
-                                    if (!(/^1[34578]\d{9}$/.test($("#phone").val()))) {
-                                        layer.msg("请输入正确的手机号码", {
-                                            time: 2000,
-                                            icon: 7
-                                        })
-                                    } else {
-                                        $.ajax({
-                                            type: "post",
-                                            url: "${pageContext.request.contextPath}/zshop/SendVerificationCode",
-                                            data: {
-                                                phone: $("#phone").val()
-                                            },
-                                            success: function (data) {
-                                                if (data.status == 1) {
-                                                    var time = 60;
-                                                    var t = setInterval(function () {
-                                                        time--;
-                                                        if (time > 0) {
-                                                            $("#send").text("已发送(" + time + ")");
-                                                            $('#send').attr("disabled", true);
-                                                        } else {
-                                                            $("#send").text("重新发送");
-                                                            $('#send').attr("disabled", false);
-                                                            clearInterval(t);
-                                                        }
 
-                                                    }, 1000)
-                                                } else if (data.status == 2) {
-                                                    layer.msg(data.message, {
-                                                        time: 2000,
-                                                        icon: 7
-                                                    })
-                                                } else if (data.status == 3) {
-                                                    layer.msg("该手机号未注册!请先注册", {
-                                                        time: 2000,
-                                                        icon: 7
-                                                    });
-                                                    $("#zcPhone").val($("#phone").val());
-                                                    $("#loginModal").modal("hide");
-                                                    $("#registModal").modal("show");
-                                                }
-                                            },
-                                            error: function () {
-                                                layer.msg("系统繁忙，请重试!", {
-                                                    icon: 7,
-                                                    time: 2000
-                                                })
-                                            }
-                                        });
-                                    }
-
-                                };
-
-                                function textLogin() {
-                                    $.ajax({
-                                        type: "post",
-                                        url: "${pageContext.request.contextPath}/zshop/textLogin",
-                                        data: {
-                                            phone: $("#phone").val(),
-                                            verificationCode: $("#verificationCode").val(),
-                                        },
-                                        dataType: "json",
-                                        success: function (data) {
-                                            if (data.status == 1) {
-                                                window.location = location
-                                            } else if (data.status == 2) {
-                                                layer.msg(data.message, {
-                                                    time: 2000,
-                                                    icon: 7
-                                                })
-                                            }
-                                        },
-                                        error: function () {
-                                            layer.msg("系统繁忙，请重试!", {
-                                                icon: 7,
-                                                time: 2000
-                                            })
-                                        }
-                                    })
-                                }
                             </script>
                         </div>
                     </div>
@@ -533,36 +583,37 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">会员注册</h4>
             </div>
-            <form action="" class="form-horizontal" method="post">
+            <form action="${pageContext.request.contextPath}/user/addUser" class="form-horizontal" id="addUserForm"
+                  method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">用户姓名:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text">
+                            <input class="form-control" name="name" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">登陆账号:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text">
+                            <input class="form-control" name="loginName" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">登录密码:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="password">
+                            <input class="form-control" name="password" type="password">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系电话:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" id="zcPhone" type="text">
+                            <input class="form-control" name="phone" id="zcPhone" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系地址:</label>
                         <div class="col-sm-6">
-                            <input class="form-control" type="text">
+                            <input class="form-control" name="address" type="text">
                         </div>
                     </div>
                 </div>

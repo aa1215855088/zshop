@@ -9,6 +9,7 @@
         set name       = #{name},
             login_name = #{loginName},
             phone      = #{phone},
+            password   = #{password},
             address    = #{address}
         where id = #{id};
     </update>
@@ -63,4 +64,9 @@
         from t_customer
         where phone = #{phone};
     </select>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="customer">
+        insert into t_customer (name, login_name, password, phone, address, is_valid, regist_date)
+        values (#{name}, #{loginName}, #{password}, #{phone}, #{address}, 1, NOW());
+    </insert>
 </mapper>

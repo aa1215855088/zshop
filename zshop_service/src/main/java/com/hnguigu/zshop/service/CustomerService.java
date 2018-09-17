@@ -39,7 +39,7 @@ public interface CustomerService {
      *
      * @param customer
      */
-    void updateCustomer(Customer customer);
+    int updateCustomer(Customer customer);
 
     /**
      * 修改用户账号是否有效
@@ -67,7 +67,7 @@ public interface CustomerService {
      * @param username
      * @return
      */
-    Customer getCustomerByNanme(String username);
+    Customer getCustomerByName(String username);
 
     /**
      * 短信登录
@@ -77,4 +77,11 @@ public interface CustomerService {
      * @return
      */
     Customer getCustomerByPhone(String phone);
+
+    /**
+     * 用户注册
+     * @param customer
+     */
+    int addUser(Customer customer);
+
 }

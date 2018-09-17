@@ -27,16 +27,16 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="main.html">商城主页</a>
+                        <a href="${pageContext.request.contextPath}/zshop/home">商城主页</a>
                     </li>
                     <li>
-                        <a href="myOrders.html">我的订单</a>
+                        <a href="/zshop/myOrders">我的订单</a>
                     </li>
                     <li>
-                        <a href="cart.jsp">购物车</a>
+                        <a href="${pageContext.request.contextPath}/zshop/cart">购物车</a>
                     </li>
                     <li class="active">
-                        <a href="center.jsp">会员中心</a>
+                        <a href="${pageContext.request.contextPath}/zshop/center">会员中心</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

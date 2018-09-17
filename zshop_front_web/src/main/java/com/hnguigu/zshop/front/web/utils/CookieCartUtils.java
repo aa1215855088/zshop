@@ -2,6 +2,7 @@ package com.hnguigu.zshop.front.web.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hnguigu.zshop.common.constant.CartConstant;
+import com.hnguigu.zshop.domain.Customer;
 import com.hnguigu.zshop.vo.cart.BuyerCart;
 import com.hnguigu.zshop.vo.cart.BuyerItem;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,7 +24,6 @@ import java.util.List;
  * @create: 2018-08-17 19:20
  **/
 public class CookieCartUtils {
-
 
 
     /**
@@ -134,6 +134,7 @@ public class CookieCartUtils {
             }
         }
 
+
         //如果没有商品数据了 则删除Cookie
         if (CollectionUtils.isEmpty(items)) {
             addCart(response, buyerCart, 0);
@@ -141,4 +142,6 @@ public class CookieCartUtils {
 
         addCart(response, buyerCart, 24 * 60 * 60);
     }
+
+
 }

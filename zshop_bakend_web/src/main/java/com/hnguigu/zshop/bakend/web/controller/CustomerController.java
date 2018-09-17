@@ -98,7 +98,8 @@ public class CustomerController {
     @RequestMapping("updateCustomer")
     public String updateCustomer(Customer customer, Integer pageNum) {
 
-        this.customerService.updateCustomer(customer);
+        this.customerService.
+                updateCustomer(customer);
         return "forward:findAll?pageNum=" + pageNum;
     }
 }

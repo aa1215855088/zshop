@@ -81,7 +81,7 @@ public class LoginController {
             //将存在cookie中的购物车信息删除 缓存到redis
             BuyerCart cookieCart = CookieCartUtils.getCart(request);
             if (cookieCart != null) {
-                BuyerCart redisCart = this.redisCartService.getCart(username + "cart");
+                BuyerCart redisCart = this.redisCartService.getCart(username);
                 if (redisCart != null) {
                     List<BuyerItem> items = cookieCart.getItems();
                     for (BuyerItem cookieItem : items) {
@@ -91,8 +91,6 @@ public class LoginController {
                 } else {
                     this.redisCartService.addCart(username, cookieCart);
                 }
-
-
                 CookieCartUtils.addCart(response, new BuyerCart(), 0);
             }
             return ResponseResult.success();
@@ -119,7 +117,7 @@ public class LoginController {
         try {
             //1 首先生成6位数的验证码
             int randNum = RandomUtil.getRandNum(1, 999999);
-            //1.1设置验证码的有效时间（通过redis）
+            //1.1设置验证码的有效时间（通过redis，默:15分钟）
             RedisUtil.set(phone + "Code", String.valueOf(randNum), 60 * 15);
             //2 通过HttpClient后台发送请求
             Map<String, String> params = new HashMap<>();
@@ -139,7 +137,7 @@ public class LoginController {
 
     @RequestMapping("textLogin")
     @ResponseBody
-    public ResponseResult textLogin(String phone, String verificationCode) {
+    public ResponseResult textLogin(String phone, String verificationCode, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         Customer customer = this.customerService.getCustomerByPhone(phone);
         if (customer != null) {
             String code = RedisUtil.get(phone + "Code");
@@ -147,6 +145,23 @@ public class LoginController {
                 Subject subject = SecurityUtils.getSubject();
                 Session session = subject.getSession();
                 session.setAttribute("user", customer);
+                //将存在cookie中的购物车信息删除 缓存到redis
+                BuyerCart cookieCart = CookieCartUtils.getCart(request);
+                if (cookieCart != null) {
+                    BuyerCart redisCart = this.redisCartService.getCart(customer.getLoginName());
+                    if (redisCart != null) {
+                        List<BuyerItem> items = cookieCart.getItems();
+                        for (BuyerItem cookieItem : items) {
+                            redisCart.addProducts(cookieItem);
+                        }
+                        this.redisCartService.addCart(customer.getLoginName(), redisCart);
+                    } else {
+                        this.redisCartService.addCart(customer.getLoginName(), cookieCart);
+                    }
+                    CookieCartUtils.addCart(response, new BuyerCart(), 0);
+                }
+                //清除验证码
+                RedisUtil.del(phone + "Code");
                 return ResponseResult.success();
             } else {
                 return ResponseResult.fail("验证码有误!请重新输入。");
