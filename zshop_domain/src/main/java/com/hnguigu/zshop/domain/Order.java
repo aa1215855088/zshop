@@ -11,7 +11,8 @@ import java.util.Set;
  * @author: 徐子楼
  * @create: 2018-09-15 08:37
  **/
-public class Order implements Serializable {
+public class
+Order implements Serializable {
     private static final long serialVersionUID = -3905816892866012800L;
 
     /**

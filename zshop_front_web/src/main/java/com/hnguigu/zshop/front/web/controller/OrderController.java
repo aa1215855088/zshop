@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -52,15 +53,15 @@ public class OrderController {
 
         model.addAttribute("orderList", orderList);
 
+
         return "myOrders";
     }
 
-    @RequestMapping("/orderItem")
-    public String orderDetail(String orderCode, Model model) {
+    @RequestMapping(value = "/orderDetails", method = RequestMethod.GET)
+        public String orderDetail(String orderCode, Model model) {
+        //1根据订单号查出该订单下面的商品
         Order order = this.orderServer.getOrderByOrderCode(orderCode);
-
         model.addAttribute("order", order);
-
         return "orderDetail";
     }
 
@@ -92,8 +93,10 @@ public class OrderController {
     public ResponseResult generatingOrder(HttpSession session) throws MyException {
 
         Customer user = (Customer) session.getAttribute("user");
+        //生成订单号
+        String orderCode = GeneratingOrderUtil.generateOrder(user.getLoginName());
         Order order = new Order();
-        order.setOrderCode(GeneratingOrderUtil.generateOrder(user.getLoginName()));
+        order.setOrderCode(orderCode);
         order.setCustomer(user);
         order.setPrice(buyerCart.getTotalPrice());
         order.setCreateDate(new Date());
@@ -132,7 +135,7 @@ public class OrderController {
             this.redisCartService.addCart(user.getLoginName(), cart);
         }
 
-        return ResponseResult.success(order);
+        return ResponseResult.success();
     }
 
 

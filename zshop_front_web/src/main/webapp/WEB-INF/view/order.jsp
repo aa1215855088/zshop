@@ -12,16 +12,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
 </head>
 <script>
     function generatingOrder() {
         $.ajax({
             type: "post",
             url: "${pageContext.request.contextPath}/zshop/generatingOrder",
-            data: {},
             dataType: "json",
             success: function (data) {
-                if (data.statu == 1) {
+                if (data.status == 1) {
                     window.location = "/zshop/myOrders";
                 } else {
                     layer.msg("系统繁忙!", {

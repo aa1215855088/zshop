@@ -22,7 +22,7 @@
             url: "${pageContext.request.contextPath}/zshop/Authentication",
             success: function (data) {
                 if (data.status == 1) {
-                    window.location = "${pageContext.request.contextPath}/zshop/orderItem?orderCode=" + orderCode
+                    window.location = "${pageContext.request.contextPath}/zshop/orderDetails?orderCode=" + orderCode;
                 } else if (data.status == 2) {
                     layer.msg(data.message, {
                         time: 2000,
@@ -102,7 +102,8 @@
         <c:forEach items="${orderList}" var="order">
             <tr>
                 <td colspan="5">
-                    <span>订单编号：<a href="${pageContext.request.contextPath}/zshop/orderItem?orderCode=${order.orderCode}">${order.orderCode}</a></span>
+                    <span>订单编号：<a
+                            href="${pageContext.request.contextPath}/zshop/orderDetails?orderCode=${order.orderCode}" >${order.orderCode}</a></span>
                     <span>成交时间：<fmt:formatDate value="${order.createDate}" type="both"/></span>
                 </td>
             </tr>
@@ -129,7 +130,6 @@
             </c:forEach>
             <tr>
                 <td colspan="5">
-                    <span class="pull-right"><button class="btn btn-success" onclick="orderDetail(${order.orderCode})">订单详情</button></span>
                     <span class="">总计:<span class="text-color">￥${order.price}</span></span>
                 </td>
             </tr>

@@ -53,7 +53,7 @@
         from t_order ord
                  left join t_order_item ori on ord.order_code = ori.order_id
                  left join t_product pro on pro.id = ori.product_id
-        where ord.customer_id = #{userId}
+        where ord.customer_id = #{userId} order by ord.id desc
     </select>
 
     <select id="getOrderByOrderCode" resultMap="orderMap">

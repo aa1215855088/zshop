@@ -38,6 +38,7 @@
             <mvc:mapping path="/zshop/center"/>
             <mvc:mapping path="/zshop/order"/>
             <mvc:mapping path="/zshop/generatingOrder"/>
+            <mvc:mapping path="/zshop/orderItem"/>
             <bean class="com.hnguigu.zshop.front.web.interceptor.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
