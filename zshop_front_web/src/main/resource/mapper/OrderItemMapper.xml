@@ -6,11 +6,10 @@
     <select id="getOrderItemByOrderId" resultType="orderItem">
         select *
         from t_order_item
-        where order_id = #{order.id};
+        where order_id = #{order.orderCode};
     </select>
-
     <insert id="save">
         insert into t_order_item (product_id, num, price, order_id)
-        values (#{product.id}, #{num}, #{price}, #{order.id});
+        values (#{product.id}, #{num}, #{price}, #{order.orderCode});
     </insert>
 </mapper>

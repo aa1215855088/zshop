@@ -160,7 +160,9 @@
                 </tr>
                 <tr>
                     <td colspan="7" align="right">
-                        <button class="btn btn-warning margin-right-15" type="button"> 继续购物</button>
+                        <button class="btn btn-warning margin-right-15" onclick="window.location='/zshop/home'"
+                                type="button"> 继续购物
+                        </button>
                     </td>
                 </tr>
             </c:when>
@@ -199,7 +201,8 @@
                         </button>
                         <button onclick="clearCart()" class="btn btn-warning  margin-right-15" type="button"> 清空购物车
                         </button>
-                        <button onclick="window.location='/zshop/home'" class="btn btn-warning margin-right-15" type="button">
+                        <button onclick="window.location='/zshop/home'" class="btn btn-warning margin-right-15"
+                                type="button">
                             继续购物
                         </button>
                         <a href="#">

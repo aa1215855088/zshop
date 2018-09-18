@@ -146,6 +146,7 @@ function myOrders() {
 
 };
 
+
 //结算
 function order() {
     var ids = $("input:checkbox[name='id']").serialize();

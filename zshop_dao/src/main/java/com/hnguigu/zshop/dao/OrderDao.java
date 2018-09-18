@@ -23,8 +23,15 @@ public interface OrderDao {
     /**
      * 查询用户的订单
      *
-     * @param loginName
+     * @param userId
      * @return
      */
-    List<Order> getOrderByUserId(String loginName);
+    List<Order> getOrderByUserId(int userId);
+
+    /**
+     * 根据订单号查询订单
+     * @param orderCode
+     * @return
+     */
+    Order getOrderByOrderCode(String orderCode);
 }

@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../commons/taglibs.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -7,32 +7,18 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>确认订单</title>
+    <title>订单详情</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/myjs/myJs.js"></script>
+    <script>
+
+
+    </script>
 </head>
-<script>
-    function generatingOrder() {
-        $.ajax({
-            type: "post",
-            url: "${pageContext.request.contextPath}/zshop/generatingOrder",
-            data: {},
-            dataType: "json",
-            success: function (data) {
-                if (data.statu == 1) {
-                    window.location = "/zshop/myOrders";
-                } else {
-                    layer.msg("系统繁忙!", {
-                        icon: 7,
-                        time: 2000
-                    })
-                }
-            }
-        })
-    }
-</script>
+
 <body>
 <div class="navbar navbar-default clear-bottom">
     <div class="container">
@@ -50,7 +36,7 @@
                 <li>
                     <a href="${pageContext.request.contextPath}/zshop/home">商城主页</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="${pageContext.request.contextPath}/zshop/myOrders">我的订单</a>
                 </li>
                 <li>
@@ -61,8 +47,14 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#loginModal">登陆</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#registModal">注册</a>
+                </li>
                 <li class="userName">
-                    您好：${user.name}！
+                    您好：user！
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle user-active" data-toggle="dropdown" role="button">
@@ -92,8 +84,16 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="page-header" style="margin-bottom: 0px;">
-                <h3>我的购物车</h3>
+                <h3>我的订单</h3>
             </div>
+        </div>
+    </div>
+    <div class="row head-msg">
+        <div class="col-md-12">
+            用户:<b><span>${user.name}</span></b>
+        </div>
+        <div class="col-md-12">
+            订单: <b><span>${order.orderCode}</span></b>
         </div>
     </div>
     <table class="table table-hover table-striped table-bordered">
@@ -104,51 +104,25 @@
             <th>商品数量</th>
             <th>商品总价</th>
         </tr>
-        <c:forEach items="${cart.items}" var="itme">
+        <c:forEach items="${order.orderItem}" var="item">
             <tr>
-                <td>${itme.product.id}</td>
-                <td>${itme.product.name}</td>
-                <td><img src="${pageContext.request.contextPath}/zshop/showImage?path=${itme.product.image}" alt=""
+                <td>${item.id}</td>
+                <td>${item.product.name}</td>
+                <td><img src="${pageContext.request.contextPath}/zshop/showImage?path=${item.product.image}" alt=""
                          width="60" height="60"></td>
-                <td>${itme.amount}</td>
-                <td>${itme.priceSum}</td>
+                <td>${item.num}</td>
+                <td>${item.price}</td>
             </tr>
         </c:forEach>
         <tr>
             <td colspan="5" class="foot-msg">
-                总计：<b> <span>${cart.totalPrice}</span></b>元
-                <a href="${pageContext.request.contextPath}/zshop/cart">
-                    <button class="btn btn-warning pull-right ">返回</button>
-                </a>
-                <button class="btn btn-warning pull-right margin-right-15" onclick="generatingOrder()">生成订单
-                </button>
+                共<b><span>${order.orderItem.size()}</span></b>条&nbsp; &nbsp; 总计
+                <b><span>${order.price}</span></b>元
             </td>
         </tr>
     </table>
 </div>
 <!-- content end-->
-<div class="modal fade" id="buildOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">提示消息</h4>
-            </div>
-            <div class="orderMsg">
-                <p>
-                    订单生成成功！！
-                </p>
-                <p>
-                    订单号:<span id="orderId"></span>
-                </p>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-warning">确&nbsp;&nbsp;定</button>
-        </div>
-    </div>
-</div>
 <!-- footers start -->
 <div class="footers">
     版权所有：南京网博
@@ -184,7 +158,13 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" aria-label="Close">
+                        关&nbsp;&nbsp;闭
+                    </button>
+                    <button type="reset" class="btn btn-warning">重&nbsp;&nbsp;置</button>
+                    <button type="submit" class="btn btn-warning">修&nbsp;&nbsp;改</button>
+                </div>
             </form>
         </div>
     </div>

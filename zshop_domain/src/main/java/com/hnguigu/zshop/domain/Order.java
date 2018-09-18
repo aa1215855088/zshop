@@ -2,6 +2,8 @@ package com.hnguigu.zshop.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @program: zshop
@@ -15,8 +17,12 @@ public class Order implements Serializable {
     /**
      * 订单ID
      */
-    private String id;
+    private Integer id;
 
+    /**
+     * 订单号
+     */
+    private String orderCode;
     /**
      *
      */
@@ -37,12 +43,25 @@ public class Order implements Serializable {
      */
     private Date createDate;
 
-    public String getId() {
+    /**
+     * 订单明细
+     */
+    private Set<OrderItem> orderItem;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getNo() {
@@ -75,5 +94,26 @@ public class Order implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Set<OrderItem> getOrderItem() {
+        return orderItem;
+    }
+
+    public void setOrderItem(Set<OrderItem> orderItem) {
+        this.orderItem = orderItem;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderCode='" + orderCode + '\'' +
+                ", no='" + no + '\'' +
+                ", customer=" + customer +
+                ", price=" + price +
+                ", createDate=" + createDate +
+                ", orderItem=" + orderItem +
+                '}';
     }
 }

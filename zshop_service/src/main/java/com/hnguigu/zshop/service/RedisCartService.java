@@ -25,4 +25,11 @@ public interface RedisCartService {
      * @param cart
      */
     void addCart(String userLoginName, BuyerCart cart);
+
+    /**
+     * 清空购物车
+     * @param loginName
+     */
+    void delCart(String loginName);
+
 }

@@ -44,11 +44,24 @@ public class OrderController {
     private BuyerCart buyerCart;
 
     @RequestMapping("myOrders")
-    public String myOrders(Model model,HttpSession session) {
+    public String myOrders(Model model, HttpSession session) {
         //1 根据用户查询他拥有的订单号
         Customer user = (Customer) session.getAttribute("user");
 
+        List<Order> orderList = this.orderServer.getOrderByUserId(user.getId());
+
+        model.addAttribute("orderList", orderList);
+
         return "myOrders";
+    }
+
+    @RequestMapping("/orderItem")
+    public String orderDetail(String orderCode, Model model) {
+        Order order = this.orderServer.getOrderByOrderCode(orderCode);
+
+        model.addAttribute("order", order);
+
+        return "orderDetail";
     }
 
     @RequestMapping("/order")
@@ -80,9 +93,8 @@ public class OrderController {
 
         Customer user = (Customer) session.getAttribute("user");
         Order order = new Order();
-        order.setId(GeneratingOrderUtil.generateOrder(user.getLoginName()));
+        order.setOrderCode(GeneratingOrderUtil.generateOrder(user.getLoginName()));
         order.setCustomer(user);
-        order.setNo("");
         order.setPrice(buyerCart.getTotalPrice());
         order.setCreateDate(new Date());
         //1 生成订单(订单自动生成所有没必要返回主键)
@@ -114,9 +126,14 @@ public class OrderController {
                 }
             }
         }
-
-        this.redisCartService.addCart(user.getLoginName(), cart);
+        if (CollectionUtils.isEmpty(cart.getItems())) {
+            this.redisCartService.delCart(user.getLoginName());
+        } else {
+            this.redisCartService.addCart(user.getLoginName(), cart);
+        }
 
         return ResponseResult.success(order);
     }
+
+
 }

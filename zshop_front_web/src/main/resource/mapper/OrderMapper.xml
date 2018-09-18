@@ -3,13 +3,80 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hnguigu.zshop.dao.OrderDao">
+
+
+    <resultMap id="productMap" type="com.hnguigu.zshop.domain.Product">
+        <id column="pid" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pprice" property="price"/>
+        <result column="info" property="info"/>
+        <result column="image" property="image"/>
+    </resultMap>
+
+    <resultMap id="orderItemMap" type="com.hnguigu.zshop.domain.OrderItem">
+        <id column="oid" property="id"/>
+        <result column="num" property="num"/>
+        <result column="oprice" property="price"/>
+        <association property="product" column="productId" resultMap="productMap"/>
+    </resultMap>
+
+    <resultMap id="orderMap" type="com.hnguigu.zshop.domain.Order">
+        <id column="id" property="id"/>
+        <result property="createDate" column="createDate"/>
+        <result property="price" column="sumprice"/>
+        <result property="orderCode" column="orderCode"/>
+        <collection property="orderItem" column="orderCode" resultMap="orderItemMap"/>
+    </resultMap>
+
     <insert id="save">
-        insert into t_order (id, no, customer_id, prcie, create_date)
-        values (#{id}, #{no}, #{customer.id}, #{price}, #{createDate});
+        insert into t_order (customer_id, prcie, create_date, order_code)
+        values (#{customer.id}, #{price}, #{createDate}, #{orderCode});
     </insert>
-    <select id="getOrderByUserId" resultType="order">
-        select *
-        from t_order
-        where customer_id = #{loginName};
+
+    <select id="getOrderByUserId" resultMap="orderMap">
+        select ord.id          id,
+               ord.customer_id customerId,
+               ord.create_date createDate,
+               ord.order_code  orderCode,
+               ord.prcie       sumprice,
+               ori.id          oid,
+               ori.order_id    orderCode,
+               ori.price       oprice,
+               ori.num         num,
+               ori.product_id  productId,
+               ori.id          oid,
+               pro.id          pid,
+               pro.price       pprice,
+               pro.name        name,
+               pro.image       image,
+               pro.info        info
+        from t_order ord
+                 left join t_order_item ori on ord.order_code = ori.order_id
+                 left join t_product pro on pro.id = ori.product_id
+        where ord.customer_id = #{userId}
     </select>
+
+    <select id="getOrderByOrderCode" resultMap="orderMap">
+        select ord.id          id,
+               ord.customer_id customerId,
+               ord.create_date createDate,
+               ord.order_code  orderCode,
+               ord.prcie       sumprice,
+               ori.id          oid,
+               ori.order_id    orderCode,
+               ori.price       oprice,
+               ori.num         num,
+               ori.product_id  productId,
+               ori.id          oid,
+               pro.id          pid,
+               pro.price       pprice,
+               pro.name        name,
+               pro.image       image,
+               pro.info        info
+        from t_order ord
+                 left join t_order_item ori on ord.order_code = ori.order_id
+                 left join t_product pro on pro.id = ori.product_id
+        where ord.order_code = #{orderCode}
+    </select>
+
 </mapper>

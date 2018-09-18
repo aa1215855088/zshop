@@ -29,7 +29,12 @@ public class OrderServerImpl implements OrderServer {
     }
 
     @Override
-    public List<Order> getOrderByUserId(String loginName) {
-        return this.orderDao.getOrderByUserId(loginName);
+    public List<Order> getOrderByUserId(int userId) {
+        return this.orderDao.getOrderByUserId(userId);
+    }
+
+    @Override
+    public Order getOrderByOrderCode(String orderCode) {
+        return this.orderDao.getOrderByOrderCode(orderCode);
     }
 }

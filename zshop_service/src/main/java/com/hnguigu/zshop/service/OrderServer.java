@@ -1,6 +1,8 @@
 package com.hnguigu.zshop.service;
 
 import com.hnguigu.zshop.domain.Order;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * @author: 徐子楼
  * @create: 2018-09-15 08:44
  **/
+
 public interface OrderServer {
     /**
      * 添加订单
@@ -22,8 +25,15 @@ public interface OrderServer {
     /**
      * 查询用户的订单
      *
-     * @param loginName
+     * @param
      * @return
      */
-    List<Order> getOrderByUserId(String loginName);
+    List<Order> getOrderByUserId(int userId);
+
+    /**
+     * 根据订单号查询订单
+     * @param orderCode
+     * @return
+     */
+    Order getOrderByOrderCode(String orderCode);
 }

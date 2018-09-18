@@ -2,6 +2,8 @@ package com.hnguigu.zshop.service;
 
 import com.hnguigu.zshop.domain.Order;
 import com.hnguigu.zshop.domain.OrderItem;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
  * @author: 徐子楼
  * @create: 2018-09-15 09:09
  **/
+
 public interface OrderItemServer {
     /**
      * 保存订单明细

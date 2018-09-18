@@ -12,7 +12,6 @@ import java.util.List;
  * @create: 2018-08-15 08:48
  **/
 public interface SysuserDao {
-
     /**
      * 查询所有管理员
      *

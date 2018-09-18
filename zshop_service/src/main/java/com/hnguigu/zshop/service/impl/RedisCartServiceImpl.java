@@ -18,7 +18,7 @@ public class RedisCartServiceImpl implements RedisCartService {
 
     @Override
     public BuyerCart getCart(String userLoginName) {
-        String cartInfo = RedisUtil.get(userLoginName+"cart");
+        String cartInfo = RedisUtil.get(userLoginName + "cart");
 
         return JSONObject.parseObject(cartInfo, BuyerCart.class);
 
@@ -26,6 +26,11 @@ public class RedisCartServiceImpl implements RedisCartService {
 
     @Override
     public void addCart(String userLoginName, BuyerCart cart) {
-        RedisUtil.set(userLoginName+"cart", JSON.toJSONString(cart));
+        RedisUtil.set(userLoginName + "cart", JSON.toJSONString(cart));
+    }
+
+    @Override
+    public void delCart(String loginName) {
+        RedisUtil.del(loginName + "cart");
     }
 }

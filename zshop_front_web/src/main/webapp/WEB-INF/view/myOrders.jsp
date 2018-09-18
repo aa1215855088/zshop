@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="../../commons/taglibs.jsp" %>
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -11,8 +12,28 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/myjs/myJs.js"></script>
 </head>
-
+<script>
+    //订单详情
+    function orderDetail(orderCode) {
+        $.ajax({
+            type: "post",
+            url: "${pageContext.request.contextPath}/zshop/Authentication",
+            success: function (data) {
+                if (data.status == 1) {
+                    window.location = "${pageContext.request.contextPath}/zshop/orderItem?orderCode=" + orderCode
+                } else if (data.status == 2) {
+                    layer.msg(data.message, {
+                        time: 2000,
+                        icon: 7
+                    })
+                    $("#loginModal").modal("show");
+                }
+            }
+        })
+    };
+</script>
 <body>
 <div class="navbar navbar-default clear-bottom">
     <div class="container">
@@ -78,106 +99,42 @@
         </div>
     </div>
     <table class="table table-hover   orderDetail">
-        <tr>
-            <td colspan="5">
-                <span>订单编号：<a href="orderDetail.html">4722456552315</a></span>
-                <span>成交时间：2017-01-01  11:58:49</span>
-            </td>
-        </tr>
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/images/shop1.jpg" alt=""></td>
-            <td class="order-content">
-                <p>
-                    秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                </p>
-                <p>颜色：单件粉色上衣</p>
-                <p>尺码：s</p>
-            </td>
-            <td>
-                ￥180.00
-            </td>
-            <td>
-                2
-            </td>
-            <td class="text-color">
-                ￥360.00
-            </td>
-        </tr>
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/images/shop2.jpg" alt=""></td>
-            <td class="order-content">
-                <p>
-                    秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                </p>
-                <p>颜色：单件粉色上衣</p>
-                <p>尺码：s</p>
-            </td>
-            <td>
-                ￥60.00
-            </td>
-            <td>
-                2
-            </td>
-            <td class="text-color">
-                ￥60.00
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5">
-                <span class="pull-right"><button class="btn btn-danger">删除订单</button></span>
-                <span class="">总计:<span class="text-color">￥420.00</span></span>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5">
-                <span>订单编号：<a href="orderDetail.html">4722456552315</a></span>
-                <span>成交时间：2017-01-01  11:58:49</span>
-            </td>
-        </tr>
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/images/shop1.jpg" alt=""></td>
-            <td class="order-content">
-                <p>
-                    秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                </p>
-                <p>颜色：单件粉色上衣</p>
-                <p>尺码：s</p>
-            </td>
-            <td>
-                ￥180.00
-            </td>
-            <td>
-                2
-            </td>
-            <td class="text-color">
-                ￥360.00
-            </td>
-        </tr>
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/images/shop2.jpg" alt=""></td>
-            <td class="order-content">
-                <p>
-                    秋冬韩版轮廓型宽松连帽套头学生百搭毛呢卫衣+休闲裤两件套装
-                </p>
-                <p>颜色：单件粉色上衣</p>
-                <p>尺码：s</p>
-            </td>
-            <td>
-                ￥60.00
-            </td>
-            <td>
-                2
-            </td>
-            <td class="text-color">
-                ￥60.00
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5">
-                <span class="pull-right"><button class="btn btn-danger">删除订单</button></span>
-                <span class="">总计:<span class="text-color">￥420.00</span></span>
-            </td>
-        </tr>
+        <c:forEach items="${orderList}" var="order">
+            <tr>
+                <td colspan="5">
+                    <span>订单编号：<a href="${pageContext.request.contextPath}/zshop/orderItem?orderCode=${order.orderCode}">${order.orderCode}</a></span>
+                    <span>成交时间：<fmt:formatDate value="${order.createDate}" type="both"/></span>
+                </td>
+            </tr>
+            <c:forEach items="${order.orderItem}" var="orderItem">
+                <tr>
+                    <td><img src="${pageContext.request.contextPath}/zshop/showImage?path=${orderItem.product.image}"
+                             alt="">
+                    </td>
+                    <td class="order-content">
+                        <p>
+                                ${orderItem.product.name}
+                        </p>
+                    </td>
+                    <td>
+                        ￥${orderItem.product.price}
+                    </td>
+                    <td>
+                            ${orderItem.num}
+                    </td>
+                    <td class="text-color">
+                        ￥${orderItem.price}
+                    </td>
+                </tr>
+            </c:forEach>
+            <tr>
+                <td colspan="5">
+                    <span class="pull-right"><button class="btn btn-success" onclick="orderDetail(${order.orderCode})">订单详情</button></span>
+                    <span class="">总计:<span class="text-color">￥${order.price}</span></span>
+                </td>
+            </tr>
+        </c:forEach>
+
     </table>
 </div>
 <!-- content end-->
