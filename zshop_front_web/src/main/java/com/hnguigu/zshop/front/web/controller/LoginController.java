@@ -117,8 +117,8 @@ public class LoginController {
         try {
             //1 首先生成6位数的验证码
             int randNum = RandomUtil.getRandNum(1, 999999);
-            //1.1设置验证码的有效时间（通过redis，默:15分钟）
-            RedisUtil.set(phone + "Code", String.valueOf(randNum), 60 * 15);
+            //1.1设置验证码的有效时间（通过redis，默:5分钟）
+            RedisUtil.set(phone + "Code", String.valueOf(randNum), 60 * 5);
             //2 通过HttpClient后台发送请求
             Map<String, String> params = new HashMap<>();
             params.put("mobile", phone);

@@ -66,6 +66,5 @@ public class MainController {
         this.productService.getImage(path, outputStream);
     }
 
-
 }
 

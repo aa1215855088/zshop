@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/zshop_bakend_web" />
-    <file type="web" url="file://$PROJECT_DIR$/zshop_front_web" />
+    <file type="web" url="file://$PROJECT_DIR$" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

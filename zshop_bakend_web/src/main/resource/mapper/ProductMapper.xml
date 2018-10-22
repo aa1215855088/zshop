@@ -10,7 +10,8 @@
         <result property="info" column="info"/>
         <result property="price" column="price"/>
         <result property="image" column="image"/>
-        <association property="productType" javaType="productType">
+        <result property="url" column="url"/>
+        <association property="productType" javaType="productType" column="product_type_id">
             <id property="typeId" column="type_id"/>
             <result property="typeName" column="type_name"/>
             <result property="typeStatus" column="type_status"/>
@@ -22,7 +23,7 @@
                  left join t_product_type p1 on p.product_type_id = p1.type_id
     </select>
 
-    <insert id="add" parameterType="product">
+    <insert id="add" parameterType="product" useGeneratedKeys="true" keyProperty="id">
         insert into t_product (name, price, info, image, product_type_id)
         values (#{name}, #{price}, #{info}, #{image}, #{productType.typeId});
     </insert>
@@ -53,13 +54,19 @@
         from t_product
         where id = #{id}
     </delete>
-    <update id="update">
+    <update id="update" parameterType="map">
         update t_product
-        set name=#{name},price=#{price},
-        <if test="#{image}!=''">
-            image=#{image},
-        </if>
-        product_type_id=#{productType.TypeId}
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="price!=null">price=#{price},</if>
+            <if test="image!=null and image!=''">image=#{image},</if>
+            <if test="productTypeId!=null">product_type_id=#{productTypeId},</if>
+        </trim>
         where id=#{id}
+    </update>
+    <update id="updateUrl">
+        update t_product
+        set url = #{path}
+        where id = #{id};
     </update>
 </mapper>

@@ -175,7 +175,7 @@
                         <td>${buyerItem.product.id}</td>
                         <td>${buyerItem.product.name}</td>
                         <td><img
-                                src="${pageContext.request.contextPath}/zshop/showImage?path=${buyerItem.product.image}"
+                                src="${buyerItem.product.image}"
                                 alt="" width="60" height="60">
                         </td>
                         <td>

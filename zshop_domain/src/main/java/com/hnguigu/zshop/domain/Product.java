@@ -42,6 +42,12 @@ public class Product implements Serializable {
      */
     private ProductType productType;
 
+    /**
+     * 详情地址
+     */
+
+    private String url;
+
     @Override
     public String toString() {
         return "Product{" +
@@ -102,6 +108,13 @@ public class Product implements Serializable {
         this.productType = productType;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean equals(Object obj) {

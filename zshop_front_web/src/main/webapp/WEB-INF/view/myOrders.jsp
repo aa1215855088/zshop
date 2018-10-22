@@ -109,7 +109,7 @@
             </tr>
             <c:forEach items="${order.orderItem}" var="orderItem">
                 <tr>
-                    <td><img src="${pageContext.request.contextPath}/zshop/showImage?path=${orderItem.product.image}"
+                    <td><img src="${orderItem.product.image}"
                              alt="">
                     </td>
                     <td class="order-content">

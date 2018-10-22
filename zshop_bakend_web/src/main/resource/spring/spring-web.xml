@@ -15,7 +15,7 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
+    <context:property-placeholder location="classpath:FTP.properties"/>
     <mvc:default-servlet-handler/>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -31,4 +31,5 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10000000"/>
     </bean>
+
 </beans>

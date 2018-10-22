@@ -10,6 +10,7 @@
         <result property="info" column="info"/>
         <result property="price" column="price"/>
         <result property="image" column="image"/>
+        <result property="url" column="url"/>
         <association property="productType" javaType="productType">
             <id property="typeId" column="type_id"/>
             <result property="typeName" column="type_name"/>

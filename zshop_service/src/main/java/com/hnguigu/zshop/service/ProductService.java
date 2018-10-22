@@ -7,6 +7,7 @@ import com.hnguigu.zshop.dto.ProductDTO;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: zshop
@@ -26,9 +27,9 @@ public interface ProductService {
     /**
      * 添加商品
      *
-     * @param productDTO
+     * @param product
      */
-    void add(ProductDTO productDTO) throws MyException;
+    void add(Product product) throws MyException;
 
     /**
      * 跟据商品名称查询商品
@@ -54,9 +55,9 @@ public interface ProductService {
 
     /**
      * 修改商品
-     * @param productDTO
+     * @param map
      */
-    void update(ProductDTO productDTO,Integer id) throws MyException;
+    void update(Map<String, Object> map) throws MyException;
 
     /**
      * 根据商品ID删除商品
@@ -70,4 +71,10 @@ public interface ProductService {
      */
     List<Product> queryProduct(QueryProduct queryProduct);
 
+    /**
+     * 根据ID修改url
+     * @param path
+     * @param id
+     */
+    void updateUrl(String path, int id);
 }

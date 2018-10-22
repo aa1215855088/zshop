@@ -92,13 +92,6 @@
                             }
                         }
                     },
-                    image: {
-                        validators: {
-                            notEmpty: {
-                                message: "请选择图片"
-                            }
-                        }
-                    },
                     productTypeId: {
                         validators: {
                             notEmpty: {
@@ -156,14 +149,14 @@
                         $("#pro-num").val(result.data.id);
                         $("#pro-name").val(result.data.name);
                         $("#pro-price").val(result.data.price);
-                        $("#img2").prop('src', "${pageContext.request.contextPath}/backend/product/showImage?path=" + result.data.image);
+                        $("#img2").prop('src', result.data.image);
                         $("#pro_productType").val(result.data.productType.typeId);
                     }
                 }
             })
         }
 
-        function delProduct(id, name,obj) {
+        function delProduct(id, name, obj) {
             layer.confirm("确定要删除(" + name + ")吗", {
                 icon: 3,
                 title: "提示"
@@ -311,8 +304,8 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form action="${pageContext.request.contextPath}/backend/product/updateProduct" method="get"
-              class="form-horizontal" id="updateForm">
+        <form action="${pageContext.request.contextPath}/backend/product/updateProduct" method="post"
+              class="form-horizontal" id="updateForm" enctype="multipart/form-data">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
@@ -344,7 +337,7 @@
                             <label for="pro-image" class="col-sm-4 control-label">商品图片：</label>
                             <div class="col-sm-8">
                                 <a class="file">
-                                    选择文件 <input type="file" name="image" id="pro-image">
+                                    更新图片 <input type="file" name="image" id="pro-image">
                                 </a>
                             </div>
                         </div>
@@ -372,6 +365,9 @@
         </form>
     </div>
     <!-- 修改商品 end -->
-</body>
 
+</body>
+<script>
+
+</script>
 </html>

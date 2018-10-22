@@ -54,13 +54,8 @@
 
 
         function refresh() {
-            $.ajax({
-                type: "post",
-                url: "${pageContext.request.contextPath}/backend/getVerifyCodeImage",
-                success: function (data) {
-                    $("#yzm").attr("src", "${pageContext.request.contextPath}/backend/getVerifyCodeImage");
-                }
-            });
+            document.getElementById('yzm').src = '${pageContext.request.contextPath }/backend/getVerifyCodeImage?' + Math.random();
+
         };
     </script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>

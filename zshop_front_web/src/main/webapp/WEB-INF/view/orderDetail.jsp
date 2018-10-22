@@ -108,7 +108,7 @@
             <tr>
                 <td>${item.id}</td>
                 <td>${item.product.name}</td>
-                <td><img src="${pageContext.request.contextPath}/zshop/showImage?path=${item.product.image}" alt=""
+                <td><img src="${item.product.image}" alt=""
                          width="60" height="60"></td>
                 <td>${item.num}</td>
                 <td>${item.price}</td>

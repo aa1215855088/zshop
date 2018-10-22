@@ -42,4 +42,17 @@
             <bean class="com.hnguigu.zshop.front.web.interceptor.AuthenticationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+
+    <!-- 配置freemarker 实现类 -->
+    <!--<bean class="cn.itcast.core.service.StaticPageServiceImpl">-->
+        <!--<property name="freeMarkerConfig">-->
+            <!--<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">-->
+                <!--&lt;!&ndash; 设置模板所在目录或文件夹的位置, 相对路径  &ndash;&gt;-->
+                <!--<property name="templateLoaderPath" value="/WEB-INF/ftl/" />-->
+                <!--&lt;!&ndash; 设置默认编码集 &ndash;&gt;-->
+                <!--<property name="defaultEncoding" value="UTF-8"></property>-->
+            <!--</bean>-->
+        <!--</property>-->
+    <!--</bean>-->
 </beans>

@@ -8,13 +8,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  * @author: 徐子楼
  * @create: 2018-08-11 20:44
  **/
-public class ProductVO {
+public class
+ProductVO {
 
     private Integer id;
 
     private String name;
 
-    private Double price;
+    private float price;
 
     private CommonsMultipartFile image;
 
@@ -36,11 +37,11 @@ public class ProductVO {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

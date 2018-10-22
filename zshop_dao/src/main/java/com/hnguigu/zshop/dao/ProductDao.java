@@ -5,6 +5,7 @@ import com.hnguigu.zshop.domain.Product;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: zshop
@@ -62,10 +63,9 @@ public interface ProductDao {
     /**
      * 修改
      *
-     * @param product
-     * @param id
+     * @param
      */
-    void update(Product product, @Param("id") Integer id);
+    void update(Map<String, Object> map);
 
     /**
      * 查询
@@ -73,4 +73,6 @@ public interface ProductDao {
      * @param queryProduct
      */
     List<Product> queryProduct(QueryProduct queryProduct);
+
+    void updateUrl(@Param("path") String path, @Param("id") int id);
 }

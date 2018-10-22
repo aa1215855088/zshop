@@ -169,6 +169,7 @@
     function addCart(id) {
         window.location = "${pageContext.request.contextPath}/zshop/addCart?id=" + id
     }
+
     //修改密码
     function updatePassword() {
         //手动开启验证规则
@@ -204,6 +205,7 @@
             }
         })
     }
+
     //发送验证码
     function SendVerificationCode() {
         if (!(/^1[34578]\d{9}$/.test($("#phone").val()))) {
@@ -258,6 +260,7 @@
         }
 
     };
+
     //短信登录
     function textLogin() {
         $.ajax({
@@ -417,8 +420,8 @@
                             <div class="panel-body">
                                 <div class="art-back clear-back">
                                     <div class="add-padding-bottom">
-                                        <img src="${pageContext.request.contextPath}/zshop/showImage?path=${product.image}"
-                                             class="shopImg">
+                                        <a href="${product.url}"><img src="${product.image}"
+                                                        class="shopImg"></a>
                                     </div>
                                     <h4><a href="">${product.name}</a></h4>
                                     <div class="user clearfix pull-right">

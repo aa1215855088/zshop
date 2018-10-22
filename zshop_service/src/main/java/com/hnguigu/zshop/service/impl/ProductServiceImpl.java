@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: zshop
@@ -42,34 +43,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void add(ProductDTO productDTO) throws MyException {
-        //1.文件上传
-
-        String fileName = StringUtils.getFileName(productDTO.getFileName());
-
-        /*  String filePath = productDTO.getUploadPath() + "/" + fileName;*/
-
-        String filePath = "E:/javaweb/项目实战/在线商城系统/zshop/zshop_bakend_web/src/main/webapp/uploda/" + fileName;
-        try {
-            StreamUtils.copy(productDTO.getInputStream(), new FileOutputStream(filePath));
-        } catch (IOException e) {
-            throw new MyException("文件上传失败" + e.getMessage());
-        }
-
-        //2.保存到数据库
-        Product product = new Product();
-
-        try {
-            PropertyUtils.copyProperties(product, productDTO);
-            ProductType productType = new ProductType();
-            productType.setTypeId(productDTO.getProductTypeId());
-            product.setProductType(productType);
-            product.setImage(filePath);
-            productDao.add(product);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void add(Product product) throws MyException {
+//        //1.文件上传
+//
+//        String fileName = StringUtils.getFileName(productDTO.getFileName());
+//
+//        /*  String filePath = productDTO.getUploadPath() + "/" + fileName;*/
+//
+////        String filePath = "E:/javaweb/项目实战/在线商城系统/zshop/zshop_bakend_web/src/main/webapp/uploda/" + fileName;
+////        try {
+////
+////        } catch (IOException e) {
+////            throw new MyException("文件上传失败" + e.getMessage());
+////        }
+//
+//        //2.保存到数据库
+//        Product product = new Product();
+//
+//        try {
+//            PropertyUtils.copyProperties(product, productDTO);
+//            ProductType productType = new ProductType();
+//            productType.setTypeId(productDTO.getProductTypeId());
+//            product.setProductType(productType);
+//            product.setImage(filePath);
+//            productDao.add(product);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        this.productDao.add(product);
     }
 
     @Override
@@ -97,31 +98,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void update(ProductDTO productDTO, Integer id) throws MyException {
-        String filePath = "";
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(productDTO.getFileName())) {
-            String fileName = StringUtils.getFileName(productDTO.getFileName());
-            /*  String filePath = productDTO.getUploadPath() + "/" + fileName;*/
-            filePath = "E:/javaweb/项目实战/在线商城系统/zshop/zshop_bakend_web/src/main/webapp/uploda/" + fileName;
-            try {
-                StreamUtils.copy(productDTO.getInputStream(), new FileOutputStream(filePath));
-            } catch (IOException e) {
-                throw new MyException("文件上传失败" + e.getMessage());
-            }
+    public void update(Map<String, Object> map) throws MyException {
+//        String filePath = "";
+//        if (org.apache.commons.lang3.StringUtils.isNotBlank(productDTO.getFileName())) {
+//            String fileName = StringUtils.getFileName(productDTO.getFileName());
+//            /*  String filePath = productDTO.getUploadPath() + "/" + fileName;*/
+//            filePath = "E:/javaweb/项目实战/在线商城系统/zshop/zshop_bakend_web/src/main/webapp/uploda/" + fileName;
+//            try {
+//                StreamUtils.copy(productDTO.getInputStream(), new FileOutputStream(filePath));
+//            } catch (IOException e) {
+//                throw new MyException("文件上传失败" + e.getMessage());
+//            }
+//
+//        }
+//        Product product = new Product();
+//        try {
+//            PropertyUtils.copyProperties(product, productDTO);
+//            ProductType productType = new ProductType();
+//            productType.setTypeId(productDTO.getProductTypeId());
+//            product.setProductType(productType);
+//            product.setImage(filePath);
+//            productDao.update(product, id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } M
 
-        }
-        Product product = new Product();
-        try {
-            PropertyUtils.copyProperties(product, productDTO);
-            ProductType productType = new ProductType();
-            productType.setTypeId(productDTO.getProductTypeId());
-            product.setProductType(productType);
-            product.setImage(filePath);
-            productDao.update(product, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        this.productDao.update(map);
     }
 
     @Override
@@ -135,5 +137,10 @@ public class ProductServiceImpl implements ProductService {
             return this.productDao.findAll();
         }
         return this.productDao.queryProduct(queryProduct);
+    }
+
+    @Override
+    public void updateUrl(String path, int id) {
+        this.productDao.updateUrl(path,id);
     }
 }

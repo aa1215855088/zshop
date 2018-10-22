@@ -43,10 +43,12 @@ public class CartController {
 
     @RequestMapping("addCart")
     public String addCart(Integer id, HttpSession session,
-                          HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+                          HttpServletRequest request, HttpServletResponse response, Integer productSum) throws UnsupportedEncodingException {
         BuyerCart buyerCart = null;
         Customer user = (Customer) session.getAttribute("user");
-
+        if (productSum == null || productSum == 0) {
+            productSum = 1;
+        }
         //1,获取Cookie中的购物车
         try {
             if (user != null) {
@@ -68,7 +70,7 @@ public class CartController {
             BuyerItem buyerItem = new BuyerItem();
             Product productById = this.productService.getProductById(id);
             buyerItem.setProduct(productById);
-            buyerItem.setAmount(1);
+            buyerItem.setAmount(productSum);
             buyerCart.addProducts(buyerItem);
         }
 
@@ -118,7 +120,7 @@ public class CartController {
                 }
                 this.redisCartService.addCart(user.getLoginName(), buyerCart);
             } else {
-                RedisUtil.del(user.getLoginName()+"cart");
+                RedisUtil.del(user.getLoginName() + "cart");
             }
         } else {
             if (id != null) {
