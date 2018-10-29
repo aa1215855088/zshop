@@ -59,7 +59,7 @@
         <jstl.version>${lastjson.version}</jstl.version>
         <jackson-databind.version>2.5.4</jackson-databind.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-        <spring-core.version>${version}</spring-core.version>
+        <spring-core.version>4.3.19.RELEASE</spring-core.version>
         <jedis.version>2.7.3</jedis.version>
         <protostuff-core.version>1.0.8</protostuff-core.version>
         <pagehelper.version>5.${lastjson.version}</pagehelper.version>
@@ -67,8 +67,7 @@
         <commons-collections.version>3.2</commons-collections.version>
         <lastjson.version>1.2</lastjson.version>
         <fastjson.version>1.2.47</fastjson.version>
-        <spring-aop.version>4.3.14.RELEASE</spring-aop.version>
-        <spring-aspects.version>4.3.13.RELEASE</spring-aspects.version>
+        <spring-aspects.version>4.3.19.RELEASE</spring-aspects.version>
         <version>4.1.7.RELEASE</version>
         <commons-beanutils.version>1.8.0</commons-beanutils.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
@@ -162,6 +161,11 @@
                 <artifactId>spring-context</artifactId>
                 <version>${spring-core.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring-core.version}</version>
+            </dependency>
             <!-- 2)Spring DAO层 -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -222,6 +226,7 @@
                 <artifactId>shiro-web</artifactId>
                 <version>${shiro-core.version}</version>
             </dependency>
+
             <!-- 工具类 -->
 
             <dependency>
